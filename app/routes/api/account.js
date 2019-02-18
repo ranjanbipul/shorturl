@@ -33,7 +33,7 @@ router.post('/register', function (req, res, next) {
         next();
     }
 }, function (req, res) {
-    bcrypt.hash(req.body.password, parseInt(process.env.saltRounds)).then(function (hash) {
+    bcrypt.hash(req.body.password, parseInt(process.env.APP_SALT_ROUND)).then(function (hash) {
         let user = new User({
             name: req.body.name,
             username: req.body.username,
@@ -115,9 +115,11 @@ function (req, res) {
                     res.json({
                         success: true,
                         message: 'Login Successfull',
-                        token: token,
-                        user: {
-                            name: user.name
+                        data: {
+                            token: token,
+                            user: {
+                                name: user.name
+                            }
                         }
                     });
                 }else{

@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+var cors = require('cors');
 var routes = require('./app/routes');
 var jwtAuth = require('./app/middlware/jwtAuth');
 
@@ -26,6 +27,11 @@ db.once('open', function () {
 // Configure express app
 app.set('superSecret', process.env.APP_SECRET);
 app.disable('x-powered-by')
+var corsOptions = {
+    origin: process.env.FRONT_URL,
+    credentials: true
+}
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({
     extended: false
 }));
@@ -35,4 +41,4 @@ app.use(jwtAuth);
 app.use('/',routes);
 
 // Start express app
-app.listen(process.env.SERVER_PORT, () => console.log(`App started on port ${process.env.SERVER_PORT}`))
+app.listen(process.env.APP_PORT, () => console.log(`App started on port ${process.env.APP_PORT}`))
